@@ -29,4 +29,8 @@ export class ReferenceDataService {
   deleteReferenceData(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/reference-data/${id}`);
   }
+
+  searchReferenceData(term: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/reference-data/search?term=${term}`);
+  }
 }

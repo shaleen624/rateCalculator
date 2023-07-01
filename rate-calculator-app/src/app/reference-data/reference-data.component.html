@@ -1,6 +1,9 @@
 <div class="container mt-4">
     <h2>Reference Data</h2>
     <button class="btn btn-primary mb-2" (click)="addNewRow()">Add</button>
+    <input type="text" [(ngModel)]="filterTerm" (keyup)="filterReferenceData()" placeholder="Filter by Item" />
+    <input type="text" [(ngModel)]="searchTerm" (keyup)="searchReferenceData()" placeholder="Search by Item" />
+    <button class="btn btn-secondary mb-2" (click)="clear()">Clear</button>
     <table class="table">
       <thead>
         <tr>
@@ -12,7 +15,7 @@
       </thead>
       <tbody>
         {{data}}
-        <tr *ngFor="let row of referenceData">
+        <tr *ngFor="let row of filteredReferenceData">
           <td>
             <span *ngIf="!row.editMode">{{ row.item }}</span>
             <input *ngIf="row.editMode" type="text" class="form-control" [(ngModel)]="row.item" />

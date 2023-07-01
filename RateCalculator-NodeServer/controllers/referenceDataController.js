@@ -7,7 +7,7 @@ exports.getAllReferenceData = async (req, res) => {
     const referenceData = await ReferenceData.find();
     res.json(referenceData);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error' , errorDetails: error});
   }
 };
 
@@ -23,9 +23,27 @@ exports.getReferenceDataById = async (req, res) => {
     
     res.json(referenceData);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error getReferenceDataById' , errorDetails: error});
   }
 };
+
+// Search reference data by item
+exports.searchReferenceData = async (req, res) => {
+  try {
+    const searchTerm = req.query.term;
+    console.log ("searchTerm for search", searchTerm);
+
+    const regex = new RegExp(searchTerm, 'i'); // Case-insensitive search using regular expression
+
+    const referenceData = await ReferenceData.find({ item: regex });
+
+    res.json(referenceData);
+  } catch (error) {
+    console.error('Error while searching reference data:', error);
+    res.status(500).json({ error: 'Server error' , errorDetails: error});
+  }
+};
+
 
 // Create new reference data
 exports.createReferenceData = async (req, res) => {
@@ -69,6 +87,6 @@ exports.deleteReferenceData = async (req, res) => {
 
     res.json({ message: 'Reference data deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error' , errorDetails: error});
   }
 };

@@ -25,6 +25,10 @@ export class ReferenceDataComponent implements OnInit {
     unit: '',
     editMode: false
   };
+  filteredReferenceData!: any[];
+  searchTerm: string = '';
+  filterTerm: string = '';
+
 
   constructor(private referenceDataService: ReferenceDataService) {}
 
@@ -36,9 +40,37 @@ export class ReferenceDataComponent implements OnInit {
     this.referenceDataService.getAllReferenceData().subscribe(
       (data: any) => {
         this.referenceData = data;
+        this.filteredReferenceData = data;
       },
       (error: any) => {
         console.error('Error while loading reference data:', error);
+      }
+    );
+  }
+
+  filterReferenceData(): void {
+    if (this.filterTerm.trim() === '') {
+      this.filteredReferenceData = this.referenceData;
+      return;
+    }
+
+    this.filteredReferenceData = this.referenceData.filter((data: any) =>
+      data.item.toLowerCase().includes(this.filterTerm.toLowerCase())
+    );
+  }
+
+  searchReferenceData(): void {
+    if (this.searchTerm.trim() === '') {
+      this.filteredReferenceData = this.referenceData;
+      return;
+    }
+
+    this.referenceDataService.searchReferenceData(this.searchTerm).subscribe(
+      (data: any) => {
+        this.filteredReferenceData = data;
+      },
+      (error: any) => {
+        console.error('Error while searching reference data:', error);
       }
     );
   }
@@ -54,10 +86,6 @@ export class ReferenceDataComponent implements OnInit {
         console.error('Error while creating reference data:', error);
       }
     );
-  }
-
-  editRow(row: DataRow) {
-    row.editMode = true;
   }
 
   updateReferenceData(id: string, updatedData: any): void {
@@ -86,6 +114,16 @@ export class ReferenceDataComponent implements OnInit {
 
   addNewRow() {
     this.addingNewRow = true;
+  }
+
+  editRow(row: DataRow) {
+    row.editMode = true;
+  }
+
+  clear() {
+    this.filterTerm = "";
+    this.searchTerm = "";
+    this.filteredReferenceData = this.referenceData;
   }
 
   cancelNewRow() {

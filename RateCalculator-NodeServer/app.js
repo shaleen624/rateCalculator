@@ -6,9 +6,13 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const routes = require('./routes');
+const connectDB = require('./config/database');
+
 
 // Load environment variables from .env file
 dotenv.config();
+
+connectDB();
 
 const app = express();
 
@@ -28,3 +32,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+

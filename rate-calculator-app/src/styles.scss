@@ -2,3 +2,8 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+//change all button style using element selector
+button {
+    margin-right: 10px;
+}

@@ -13,6 +13,8 @@ const referenceDataSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+  
+   
+}, {collection: 'referenceData'});
 
 module.exports = mongoose.model('ReferenceData', referenceDataSchema);

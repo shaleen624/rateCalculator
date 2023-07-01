@@ -3,6 +3,7 @@ const ReferenceData = require('../models/referenceData');
 // Get all reference data
 exports.getAllReferenceData = async (req, res) => {
   try {
+    console.log('getAllReferenceData called');
     const referenceData = await ReferenceData.find();
     res.json(referenceData);
   } catch (error) {
@@ -29,12 +30,12 @@ exports.getReferenceDataById = async (req, res) => {
 // Create new reference data
 exports.createReferenceData = async (req, res) => {
   try {
-    const { item, rate, unit } = req.body;
+    const {  item, rate, unit } = req.body;
     const newReferenceData = new ReferenceData({ item, rate, unit });
     const savedReferenceData = await newReferenceData.save();
     res.json(savedReferenceData);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error' , errorDetails: error});
   }
 };
 

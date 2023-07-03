@@ -1,0 +1,65 @@
+<form [formGroup]="productForm" (ngSubmit)="addProduct()">
+    <table class="table">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let field of formConfig">
+            <th>{{ field.label }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <ng-container *ngFor="let field of formConfig; let i = index">
+            <ng-container *ngIf="(i + 1) % 5 === 0 || field.type === 'nested'">
+              <!-- </tr><tr> -->
+            </ng-container>
+            <td *ngIf="field.type !== 'nested'">
+              <label>{{ field.label }}</label>
+              <input [type]="field.type" class="form-control" [formControlName]="field.name" [required]="field.required">
+              <div *ngIf="productForm.controls[field.name].invalid && productForm.controls[field.name].touched" class="text-danger">
+                This field is required.
+              </div>
+            </td>
+            <td *ngIf="field.type === 'nested'">
+              <!-- Render the nested component here -->
+              <table class="table nested-table">
+                <thead>
+                  <tr>
+                    <th *ngFor="let nestedField of field.fields">{{ nestedField.label }}</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="{{ field.name }}">
+                  <!-- <tr *ngFor="let nestedRow of productForm.get(field.name).controls; let rowIndex = index" [formGroupName]="rowIndex"> -->
+                    <tr *ngFor="let nestedRow of productForm.get(field.name)?.value; let rowIndex = index" [formGroupName]="rowIndex">
+                        <td *ngFor="let nestedField of field.fields">
+                      <ng-container [ngSwitch]="nestedField.type">
+                        <td *ngSwitchCase="'text'">
+                          <input [type]="nestedField.type" class="form-control" [formControlName]="nestedField.name">
+                        </td>
+                        <td *ngSwitchCase="'number'">
+                          <input [type]="nestedField.type" class="form-control" [formControlName]="nestedField.name">
+                        </td>
+                      </ng-container>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-danger" (click)="removeNestedRow(field.name, rowIndex)">
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button type="button" class="btn btn-sm btn-primary" (click)="addNestedRow(field.name)">
+                Add Row
+              </button>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Add button to submit the form -->
+    <button type="submit" class="btn btn-primary">Add Product</button>
+    
+  </form>

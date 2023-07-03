@@ -33,4 +33,9 @@ export class ReferenceDataService {
   searchReferenceData(term: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/reference-data/search?term=${term}`);
   }
+
+  getCombinedDataByCategory(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/reference-data/combined-by-category`);
+  }
+  
 }

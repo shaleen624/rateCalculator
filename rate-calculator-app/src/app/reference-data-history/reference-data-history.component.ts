@@ -63,9 +63,9 @@ export class ReferenceDataHistoryComponent implements OnInit, OnDestroy {
       this.sortDirection = 'asc';
     }
 
-    this.applySorting();
+   this.applySorting();
   }
-
+  
   applySorting(): void {
     this.filteredHistory.sort((a, b) => {
       const valueA = a[this.sortKey];

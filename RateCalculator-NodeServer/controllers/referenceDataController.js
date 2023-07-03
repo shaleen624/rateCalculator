@@ -55,14 +55,14 @@ exports.searchReferenceData = async (req, res) => {
 // Create new reference data
 exports.createReferenceData = async (req, res) => {
   try {
-    const {  item, rate, unit } = req.body;
+    const {  item, category, rate, unit } = req.body;
     const newData = req.body;
-    const newReferenceData = new ReferenceData({ item, rate, unit });
+    const newReferenceData = new ReferenceData({ item, category, rate, unit });
     const savedReferenceData = await newReferenceData.save();
     saveHistory(savedReferenceData._id, action.CREATE,null,newReferenceData);
     res.json(savedReferenceData);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' , errorDetails: error});
+    res.status(500).json({ error: 'Server error in create' , errorDetails: error});
   }
 };
 
@@ -71,7 +71,7 @@ exports.updateReferenceData = async (req, res) => {
   try {
     const id = req.params.id;
     const updatedData = req.body;
-    const { item, rate, unit } = req.body;
+    const { item, category, rate, unit } = req.body;
 
     //const updatedReferenceData = await ReferenceData.findByIdAndUpdate(id, { item, rate, unit }, { new: true });
     const referenceData = await ReferenceData.findById(id);
@@ -82,6 +82,7 @@ exports.updateReferenceData = async (req, res) => {
 
     // Update the reference data with the new values
     referenceData.item = updatedData.item;
+    referenceData.category = updatedData.category;
     referenceData.rate = updatedData.rate;
     referenceData.unit = updatedData.unit;
 
@@ -107,11 +108,12 @@ exports.updateReferenceData = async (req, res) => {
 
     res.json(updatedReferenceData);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: 'Server error in update', errorDetails: error });
   }
 };
 
 // Delete a reference data by ID
+
 exports.deleteReferenceData = async (req, res) => {
   try {
     const id = req.params.id;
@@ -123,15 +125,30 @@ exports.deleteReferenceData = async (req, res) => {
     saveHistory(id, action.DETELE, deletedReferenceData, null);
     res.json({ message: 'Reference data deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Server error' , errorDetails: error});
+    res.status(500).json({ error: 'Server error in delete' , errorDetails: error});
   }
 };
-/**
- * @param id
- * @param action
- * @param oldData
- * @param updatedData
- */
+
+// Get all reference data combined by category
+exports.combinedByCategory = async (req, res) => {
+  ReferenceData.aggregate([
+    {
+      $group: {
+        _id: '$category',
+        data: { $push: { item: '$item', rate: '$rate', unit: '$unit' } },
+      },
+    },
+  ])
+    .then((combinedData) => {
+      res.json(combinedData);
+    })
+    .catch((error) => {
+      console.error('Error while getting combined reference data by category', error);
+      res.status(500).json({ error: 'Error while getting combined reference data by category' });
+    });
+});
+
+
 saveHistory  = async (id, action, oldData, updatedData,changes) => {
   // Create a new history record
   debugger

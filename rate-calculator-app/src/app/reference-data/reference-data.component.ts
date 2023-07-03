@@ -4,6 +4,7 @@ import { ReferenceDataService } from './reference-data-service.service';
 interface DataRow {
   _id: string;
   item: string;
+  category: string,
   rate: number;
   unit: string;
   editMode: boolean;
@@ -21,6 +22,7 @@ export class ReferenceDataComponent implements OnInit {
   newRow: DataRow = {
     _id: '',
     item: '',
+    category: '',
     rate: 0,
     unit: '',
     editMode: false
@@ -131,6 +133,7 @@ export class ReferenceDataComponent implements OnInit {
     this.newRow = {
       _id: '',
       item: '',
+      category: '',
       rate: 0,
       unit: '',
       editMode: false

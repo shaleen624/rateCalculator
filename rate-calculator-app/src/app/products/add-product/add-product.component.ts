@@ -98,17 +98,17 @@ export class AddProductComponent {
         unit: 'Kilograms',
         total: 15
       }],
-      cutting: 'Cutting Value',
-      stitching: 'Stitching Value',
-      finishing: 'Finishing Value',
-      printEmb: 'Print/Emb Value',
-      eyeNose: 'Eye+Nose Value',
-      bow: 'Bow Value',
-      packing: 'Packing Value',
-      chainLock: 'Chain Lock Value',
-      overhead: 'Overhead Value',
-      others: 'Others Value',
-      totalPrice: 'Total Price Value'
+      cutting: '10',
+      stitching: '10',
+      finishing: '10',
+      printEmb: '10',
+      eyeNose: '15e',
+      bow: '5',
+      packing: '5',
+      chainLock: '2',
+      overhead: '2',
+      others: '0',
+      totalPrice: ''
     });
   }
 

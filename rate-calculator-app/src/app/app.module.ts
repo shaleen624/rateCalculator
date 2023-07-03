@@ -10,13 +10,16 @@ import { ReferenceDataComponent } from './reference-data/reference-data.componen
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ReferenceDataHistoryComponent } from './reference-data-history/reference-data-history.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     LandingPageComponent,
-    ReferenceDataComponent
+    ReferenceDataComponent,
+    ReferenceDataHistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,8 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     FormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    InfiniteScrollModule
   ],
   providers: [],
   bootstrap: [AppComponent]

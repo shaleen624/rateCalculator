@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const referenceDataRouter = require('./referenceData');
+const referenceDataHistoryRouter = require('./referenceDataHistory');
 
 // Root route
 router.get('/', (req, res) => {
@@ -13,5 +14,6 @@ router.get('/abc', (req, res) => {
 
 // Reference Data routes
 router.use('/reference-data', referenceDataRouter);
+router.use('/reference-data-history', referenceDataHistoryRouter);
 
 module.exports = router;

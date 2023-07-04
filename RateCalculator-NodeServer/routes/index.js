@@ -17,7 +17,8 @@ router.get('/abc', (req, res) => {
 // Reference Data routes
 router.use('/reference-data', referenceDataRouter);
 router.use('/reference-data-history', referenceDataHistoryRouter);
-router.use('/product-fields', productFieldsRoutes);
 router.use('/products', productRouter);
+router.use('/product-fields', productFieldsRoutes);
+
 
 module.exports = router;

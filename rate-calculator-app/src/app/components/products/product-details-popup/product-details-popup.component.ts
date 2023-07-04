@@ -17,7 +17,6 @@ export class ProductDetailsPopupComponent {
 
   constructor(private formBuilder: FormBuilder,
     private modalService: NgbModal) {
-    //
   }
 
   ngOnInit () {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgbDateStruct, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
-import { HistoryService } from './history.service';
+import { HistoryService } from '../common/services/history.service';
 
 @Component({
   selector: 'app-reference-data-history',

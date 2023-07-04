@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { ProductService } from '../product.service';
-import { ReferenceDataService } from 'src/app/reference-data/reference-data-service.service';
+import { ProductService } from '../../common/services/product.service';
+import { ReferenceDataService } from 'src/app/common/services/reference-data-service.service';
 
 @Component({
   selector: 'app-add-product',

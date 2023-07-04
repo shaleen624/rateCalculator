@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ReferenceDataService } from './reference-data-service.service';
+import { ReferenceDataService } from '../common/services/reference-data-service.service';
 
 interface DataRow {
   _id: string;

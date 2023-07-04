@@ -38,4 +38,9 @@ export class ReferenceDataService {
     return this.http.get<any>(`${this.baseUrl}/reference-data/combined-by-category`);
   }
   
+  /////Product filelds
+
+  getAllProductFileds(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/product-fields`);
+  }
 }

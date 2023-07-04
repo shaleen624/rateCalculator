@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ProductService } from '../product.service';
+import { ReferenceDataService } from 'src/app/reference-data/reference-data-service.service';
 
 @Component({
   selector: 'app-add-product',
@@ -57,12 +58,14 @@ export class AddProductComponent {
   ];
 
   constructor(private formBuilder: FormBuilder,
-    private productService: ProductService
+    private productService: ProductService,
+    private referenceDataService: ReferenceDataService
     ) { }
 
   ngOnInit(): void {
     //this.fetchProducts();
     this.createForm();
+    this.calculateTotalPrice();
   }
 
   
@@ -89,7 +92,7 @@ export class AddProductComponent {
         rate: 10,
         qty: 2,
         unit: 'Meters',
-        total: 20
+        total: ''
       }],
       fiber: [{
         type: 'Fiber Type',
@@ -102,11 +105,11 @@ export class AddProductComponent {
       stitching: '10',
       finishing: '10',
       printEmb: '10',
-      eyeNose: '15e',
+      eyeNose: '15',
       bow: '5',
       packing: '5',
-      chainLock: '2',
-      overhead: '2',
+      chainLock: '5',
+      overhead: '5',
       others: '0',
       totalPrice: ''
     });
@@ -121,8 +124,8 @@ export class AddProductComponent {
   }
 
 
-  fetchProducts(): void {
-    this.productService.getProducts()
+  fetchProductFields(): void {
+    this.referenceDataService.getAllProductFileds()
       .subscribe(
         (data) => {
           this.products = data;
@@ -133,23 +136,68 @@ export class AddProductComponent {
       );
   }
 
+  calculateTotalPrice(): number {
+    let totalPrice = 0;
+
+    for (const field of this.formConfig) {
+      if (field.name !== 'totalPrice' && field.name !== 'name' && field.name !== 'size' && field.name !== 'category' && field.type !== 'nested') {
+        const fieldValue = this.productForm?.get(field.name)?.value;
+        totalPrice += fieldValue ? +fieldValue : 0;
+      } else if (field.type === 'nested') {
+        const nestedArray:any = this.productForm.get(field.name) as FormArray;
+        for (const nestedRow of nestedArray.controls) {
+          const rate = nestedRow.get('rate').value;
+          const qty = nestedRow.get('qty').value;
+          if (rate && qty) {
+            const total = rate * qty;
+            nestedRow.get('total').setValue(total);
+            //nestedRow.patchValue({ total });
+            totalPrice += total;
+          }
+        }
+      }
+    }
+    this.productForm.get('totalPrice')?.setValue(totalPrice);
+
+
+    return totalPrice;
+  }
+
+
   addProduct(): void {
     this.productService.addProduct(this.newProduct)
       .subscribe(
         (response) => {
           console.log('Product added successfully', response);
           // Reset the form fields
-          this.newProduct = {
-            fabrics: [],
-            fibers: []
-          };
+          this.productForm.reset();
           // Fetch the updated list of products
-          this.fetchProducts();
+          //this.fetchProducts();
         },
         (error) => {
           console.error('Error while adding product', error);
         }
       );
+  }
+
+  // Save the product
+  saveProduct(): void {
+    if (this.productForm.invalid) {
+      return;
+    }
+
+    const productData = this.productForm.value;
+
+    this.productService.addProduct(productData).subscribe(
+      (response) => {
+        console.log('Product saved successfully');
+        // Reset the form
+        this.productForm.reset();
+      },
+      (error) => {
+        console.error('Failed to save product', error);
+      }
+    );
   }
 
 
@@ -177,6 +225,10 @@ export class AddProductComponent {
 
   removeFiberRow(index: number): void {
     this.newProduct.fibers.splice(index, 1);
+  }
+
+  clear () {
+    this.productForm.reset();
   }
 
 }

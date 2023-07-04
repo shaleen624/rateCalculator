@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 })
 export class ProductsComponent implements OnInit {
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+   // throw new Error('Method not implemented.');
   }
   
 }

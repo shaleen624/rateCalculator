@@ -14,7 +14,7 @@ exports.getAllReferenceData = async (req, res) => {
     const referenceData = await ReferenceData.find();
     res.json(referenceData);
   } catch (error) {
-    res.status(500).json({ error: 'Server error' , errorDetails: error});
+    res.status(500).json({ error: 'Server error', errorDetails: error });
   }
 };
 
@@ -23,14 +23,14 @@ exports.getReferenceDataById = async (req, res) => {
   try {
     const id = req.params.id;
     const referenceData = await ReferenceData.findById(id);
-    
+
     if (!referenceData) {
       return res.status(404).json({ error: 'Reference data not found' });
     }
-    
+
     res.json(referenceData);
   } catch (error) {
-    res.status(500).json({ error: 'Server error getReferenceDataById' , errorDetails: error});
+    res.status(500).json({ error: 'Server error getReferenceDataById', errorDetails: error });
   }
 };
 
@@ -38,7 +38,7 @@ exports.getReferenceDataById = async (req, res) => {
 exports.searchReferenceData = async (req, res) => {
   try {
     const searchTerm = req.query.term;
-    console.log ("searchTerm for search", searchTerm);
+    console.log("searchTerm for search", searchTerm);
 
     const regex = new RegExp(searchTerm, 'i'); // Case-insensitive search using regular expression
 
@@ -47,7 +47,7 @@ exports.searchReferenceData = async (req, res) => {
     res.json(referenceData);
   } catch (error) {
     console.error('Error while searching reference data:', error);
-    res.status(500).json({ error: 'Server error' , errorDetails: error});
+    res.status(500).json({ error: 'Server error', errorDetails: error });
   }
 };
 
@@ -55,14 +55,14 @@ exports.searchReferenceData = async (req, res) => {
 // Create new reference data
 exports.createReferenceData = async (req, res) => {
   try {
-    const {  item, category, rate, unit } = req.body;
+    const { item, category, rate, unit } = req.body;
     const newData = req.body;
     const newReferenceData = new ReferenceData({ item, category, rate, unit });
     const savedReferenceData = await newReferenceData.save();
-    saveHistory(savedReferenceData._id, action.CREATE,null,newReferenceData);
+    saveHistory(savedReferenceData._id, action.CREATE, null, newReferenceData);
     res.json(savedReferenceData);
   } catch (error) {
-    res.status(500).json({ error: 'Server error in create' , errorDetails: error});
+    res.status(500).json({ error: 'Server error in create', errorDetails: error });
   }
 };
 
@@ -102,8 +102,8 @@ exports.updateReferenceData = async (req, res) => {
     // if (Object.keys(changes).length === 0) {
     //   return res.status(400).json({ error: 'No changes detected' });
     // }
-    console.log ("Old Data>>>>>" ,JSON.stringify(oldData));
-    console.log ("Old Data>>>>>" ,JSON.stringify(updatedData));
+    console.log("Old Data>>>>>", JSON.stringify(oldData));
+    console.log("Old Data>>>>>", JSON.stringify(updatedData));
     saveHistory(updatedReferenceData._id, action.UPDATE, oldData, updatedData);
 
     res.json(updatedReferenceData);
@@ -125,7 +125,7 @@ exports.deleteReferenceData = async (req, res) => {
     saveHistory(id, action.DETELE, deletedReferenceData, null);
     res.json({ message: 'Reference data deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Server error in delete' , errorDetails: error});
+    res.status(500).json({ error: 'Server error in delete', errorDetails: error });
   }
 };
 
@@ -146,13 +146,14 @@ exports.combinedByCategory = async (req, res) => {
       console.error('Error while getting combined reference data by category', error);
       res.status(500).json({ error: 'Error while getting combined reference data by category' });
     });
-});
+};
 
 
-saveHistory  = async (id, action, oldData, updatedData,changes) => {
+
+saveHistory = async (id, action, oldData, updatedData, changes) => {
   // Create a new history record
   debugger
-  console.log ("inside saveHistory Old Data>>>>>" ,JSON.stringify(oldData));
+  console.log("inside saveHistory Old Data>>>>>", JSON.stringify(oldData));
   const historyData = new ReferenceDataHistory({
     referenceDataId: id,
     newData: updatedData,
@@ -162,5 +163,5 @@ saveHistory  = async (id, action, oldData, updatedData,changes) => {
   });
   console.log("Data to Save in history table", JSON.stringify(historyData))
   await historyData.save();
-  
+
 }

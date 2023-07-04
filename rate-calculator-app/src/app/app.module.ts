@@ -14,6 +14,7 @@ import { ReferenceDataHistoryComponent } from './reference-data-history/referenc
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ProductsComponent } from './products/products.component';
 import { AddProductComponent } from './products/add-product/add-product.component';
+import { ProductFieldsComponent } from './reference-data/product-fields/product-fields.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AddProductComponent } from './products/add-product/add-product.componen
     ReferenceDataComponent,
     ReferenceDataHistoryComponent,
     ProductsComponent,
-    AddProductComponent
+    AddProductComponent,
+    ProductFieldsComponent
   ],
   imports: [
     BrowserModule,

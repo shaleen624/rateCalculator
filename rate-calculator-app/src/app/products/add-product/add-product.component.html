@@ -1,5 +1,5 @@
 <div class="container">
-    <form [formGroup]="productForm" (ngSubmit)="saveProduct()">
+    <form [formGroup]="productForm" *ngIf="productForm" (ngSubmit)="saveProduct()">
   
       <!-- Render the nested components here -->
       <div class="row">

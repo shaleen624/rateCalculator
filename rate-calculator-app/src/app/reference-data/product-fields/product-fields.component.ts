@@ -96,7 +96,7 @@ export class ProductFieldsComponent implements OnInit {
 
   editField(field: any): void {
     field.editing = true;
-    if (field.fields) this.toggleEditingNestedFields(field.fields, true);
+    if (field.fields && field.fields.length) this.toggleEditingNestedFields(field.fields, true);
   }
 
   saveNestedField(field: any): void {
@@ -110,14 +110,14 @@ export class ProductFieldsComponent implements OnInit {
   }
 
   saveField(field: any): void {
-    if (field.type !== 'nested' && field.fields) delete field.fields;
+    if (field.type !== 'nested' && field.fields && field.fields.length) delete field.fields;
     if (!field._id) {
       // Add new field
       this.http.post<any>(this.apiUrl, field).subscribe(
         (response) => {
           field._id = response._id;
           field.editing = false;
-          if (field.fields) this.toggleEditingNestedFields(field.fields, false);
+          if (field.fields && field.fields.length) this.toggleEditingNestedFields(field.fields, false);
         },
         (error) => {
           console.log('Error adding product field:', error);
@@ -128,7 +128,7 @@ export class ProductFieldsComponent implements OnInit {
       this.http.put<any>(`${this.apiUrl}/${field._id}`, field).subscribe(
         () => {
           field.editing = false;
-          if (field.fields) this.toggleEditingNestedFields(field.fields, false);
+          if (field.fields && field.fields.length) this.toggleEditingNestedFields(field.fields, false);
         },
         (error) => {
           console.log('Error updating product field:', error);
@@ -144,7 +144,7 @@ export class ProductFieldsComponent implements OnInit {
           const index = this.filteredFormConfig.indexOf(field);
           if (index !== -1) {
             this.filteredFormConfig.splice(index, 1);
-            if (field.fields) delete field.fields;
+            if (field.fields && field.fields.length) delete field.fields;
           }
         },
         (error) => {
@@ -156,7 +156,7 @@ export class ProductFieldsComponent implements OnInit {
       const index = this.filteredFormConfig.indexOf(field);
       if (index !== -1) {
         this.filteredFormConfig.splice(index, 1);
-        if (field.fields) delete field.fields;
+        if (field.fields && field.fields.length) delete field.fields;
       }
     }
   }
@@ -173,7 +173,7 @@ export class ProductFieldsComponent implements OnInit {
       this.filteredFormConfig.pop();
     } else {
       field.editing = false;
-      if (field.fields) this.toggleEditingNestedFields(field.fields, false);
+      if (field.fields && field.fields.length) this.toggleEditingNestedFields(field.fields, false);
     }
   }
 }

@@ -1,19 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../common/services/product.service';
 import { Product } from 'src/app/common/Inteface';
+import { ReferenceDataService } from 'src/app/common/services/reference-data-service.service';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  styleUrls: ['./products.component.scss'],
 })
 export class ProductsComponent implements OnInit {
-  products: Product[] = [];
+  products: Product[]|any = [];
+  productFields: any[] = []; // Array to store the product fields reference data
+  selectedProduct: any;
+  isPopupOpen: boolean = false;
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private referenceDataService: ReferenceDataService
+  ) {}
 
-  ngOnInit(): void {
-    this.getProducts();
+  ngOnInit() {
+    this.fetchProductFields(); // Fetch the product fields reference data
+    this.getProducts(); // Fetch the products data
+  }
+
+  fetchProductFields() {
+    this.referenceDataService.getAllProductFileds().subscribe(
+      (fields: any[]) => {
+        this.productFields = fields;
+      },
+      (error: any) => {
+        console.error('Error fetching product fields:', error);
+      }
+    );
   }
 
   getProducts(): void {
@@ -32,7 +51,9 @@ export class ProductsComponent implements OnInit {
     this.productService.editProduct(product).subscribe(
       (updatedProduct: Product) => {
         // Update the corresponding product in the products array
-        const index = this.products.findIndex(p => p.id === updatedProduct.id);
+        const index = this.products.findIndex(
+          (p:any) => p.id === updatedProduct.id
+        );
         if (index !== -1) {
           this.products[index] = updatedProduct;
         }
@@ -48,12 +69,21 @@ export class ProductsComponent implements OnInit {
     this.productService.deleteProduct(product.id).subscribe(
       () => {
         // Remove the deleted product from the products array
-        this.products = this.products.filter(p => p.id !== product.id);
+        this.products = this.products.filter((p:any) => p.id !== product.id);
       },
       (error) => {
         console.error('Error deleting product:', error);
       }
     );
   }
-  
+
+  openProductDetails(product: any) {
+    this.selectedProduct = product;
+    this.isPopupOpen = true;
+  }
+
+  closeProductDetails() {
+    this.selectedProduct = null;
+    this.isPopupOpen = false;
+  }
 }

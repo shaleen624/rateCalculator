@@ -1,0 +1,63 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Size</th>
+        <th>Category</th>
+        <th>Cutting</th>
+        <th>Stitching</th>
+        <th>Finishing</th>
+        <th>Print/Emb</th>
+        <th>Eye+Nose</th>
+        <th>Bow</th>
+        <th>Packing</th>
+        <th>Chain Lock</th>
+        <th>Overhead</th>
+        <th>Others</th>
+        <th>Total Price</th>
+        <th>Fabric</th>
+        <th>Fiber</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.name }}</td>
+        <td>{{ product.size }}</td>
+        <td>{{ product.category }}</td>
+        <td>{{ product.cutting }}</td>
+        <td>{{ product.stitching }}</td>
+        <td>{{ product.finishing }}</td>
+        <td>{{ product.printEmb }}</td>
+        <td>{{ product.eyeNose }}</td>
+        <td>{{ product.bow }}</td>
+        <td>{{ product.packing }}</td>
+        <td>{{ product.chainLock }}</td>
+        <td>{{ product.overhead }}</td>
+        <td>{{ product.others }}</td>
+        <td>{{ product.totalPrice }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let fabric of product.fabric">
+              Type: {{ fabric.type }}, Rate: {{ fabric.rate }}, Qty: {{ fabric.qty }}, Unit: {{ fabric.unit }},
+              Total: {{ fabric.total }}
+            </li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li *ngFor="let fiber of product.fiber">
+              Type: {{ fiber.type }}, Rate: {{ fiber.rate }}, Qty: {{ fiber.qty }}, Unit: {{ fiber.unit }},
+              Total: {{ fiber.total }}
+            </li>
+          </ul>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-primary" (click)="editProduct(product)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteProduct(product)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ReferenceDataService } from '../common/services/reference-data-service.service';
+import { Component } from '@angular/core';
+import { ReferenceDataService } from 'src/app/common/services/reference-data-service.service';
+
 
 interface DataRow {
   _id: string;
@@ -11,11 +12,11 @@ interface DataRow {
 }
 
 @Component({
-  selector: 'app-reference-data',
-  templateUrl: './reference-data.component.html',
-  styleUrls: ['./reference-data.component.scss']
+  selector: 'app-materials',
+  templateUrl: './materials.component.html',
+  styleUrls: ['./materials.component.scss']
 })
-export class ReferenceDataComponent implements OnInit {
+export class MaterialsComponent {
   referenceData!: any[];
   data: DataRow[] = [];
   addingNewRow: boolean = false;
@@ -151,4 +152,5 @@ export class ReferenceDataComponent implements OnInit {
       console.log('History added successfully');
     }); */
   }
+
 }

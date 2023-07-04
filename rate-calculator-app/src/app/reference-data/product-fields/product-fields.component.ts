@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NgFor } from '@angular/common';
+import { nestedFieldsSample } from 'src/app/common/constants';
 
 @Component({
   selector: 'app-product-fields',
   templateUrl: './product-fields.component.html',
-  styleUrls: ['./product-fields.component.scss']
+  styleUrls: ['./product-fields.component.scss'],
 })
 export class ProductFieldsComponent implements OnInit {
   formConfig: any[];
@@ -12,7 +14,7 @@ export class ProductFieldsComponent implements OnInit {
   sortField!: string;
   sortOrder!: 'asc' | 'desc';
   apiUrl = 'http://localhost:3000/product-fields'; // Replace with your API endpoint
-  filterTerm: string = "";
+  filterTerm: string = '';
 
   constructor(private http: HttpClient) {
     this.formConfig = [];
@@ -23,6 +25,21 @@ export class ProductFieldsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProductFields();
+  }
+
+  typeChange(value: string, row: any) {
+    if (value === 'nested') {
+      const newFields = nestedFieldsSample;
+
+      if (row.fields && row.fields.length) {
+        this.toggleEditingNestedFields(row.fields, true);
+      } else {
+        row.fields = newFields;
+      }
+    } else {
+      // delete fields array from row object
+      //row.fields? delete row.fields: "";
+    }
   }
 
   getProductFields(): void {
@@ -36,7 +53,6 @@ export class ProductFieldsComponent implements OnInit {
       }
     );
   }
-
 
   filterFields(e: Event): void {
     const searchTerm = (e.target as HTMLTextAreaElement).value;
@@ -68,21 +84,40 @@ export class ProductFieldsComponent implements OnInit {
   }
 
   addField(): void {
-    const newField = { name: '', label: '', type: '', required: false , editing: true};
+    const newField = {
+      name: '',
+      label: '',
+      type: '',
+      required: false,
+      editing: true,
+    };
     this.filteredFormConfig.push(newField);
   }
 
-  editField (field: any): void {
+  editField(field: any): void {
     field.editing = true;
+    if (field.fields) this.toggleEditingNestedFields(field.fields, true);
+  }
+
+  saveNestedField(field: any): void {
+    field.editing = false;
+  }
+
+  toggleEditingNestedFields(fields: any, val: boolean): void {
+    fields.forEach((fld: any) => {
+      fld.editing = val;
+    });
   }
 
   saveField(field: any): void {
+    if (field.type !== 'nested' && field.fields) delete field.fields;
     if (!field._id) {
       // Add new field
       this.http.post<any>(this.apiUrl, field).subscribe(
         (response) => {
           field._id = response._id;
           field.editing = false;
+          if (field.fields) this.toggleEditingNestedFields(field.fields, false);
         },
         (error) => {
           console.log('Error adding product field:', error);
@@ -93,6 +128,7 @@ export class ProductFieldsComponent implements OnInit {
       this.http.put<any>(`${this.apiUrl}/${field._id}`, field).subscribe(
         () => {
           field.editing = false;
+          if (field.fields) this.toggleEditingNestedFields(field.fields, false);
         },
         (error) => {
           console.log('Error updating product field:', error);
@@ -108,6 +144,7 @@ export class ProductFieldsComponent implements OnInit {
           const index = this.filteredFormConfig.indexOf(field);
           if (index !== -1) {
             this.filteredFormConfig.splice(index, 1);
+            if (field.fields) delete field.fields;
           }
         },
         (error) => {
@@ -119,18 +156,24 @@ export class ProductFieldsComponent implements OnInit {
       const index = this.filteredFormConfig.indexOf(field);
       if (index !== -1) {
         this.filteredFormConfig.splice(index, 1);
+        if (field.fields) delete field.fields;
       }
     }
   }
 
-  clear () {
-    this.filterTerm = "";
+  clear() {
+    this.filterTerm = '';
     this.filteredFormConfig = this.formConfig;
     this.sortField = '';
     this.sortOrder = 'asc';
   }
 
-  cancel (field: any) {
-    field.editing = false;
+  cancel(field: any) {
+    if (!field._id) {
+      this.filteredFormConfig.pop();
+    } else {
+      field.editing = false;
+      if (field.fields) this.toggleEditingNestedFields(field.fields, false);
+    }
   }
 }

@@ -16,6 +16,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { AddProductComponent } from './components/products/add-product/add-product.component';
 import { ProductFieldsComponent } from './components/reference-data/product-fields/product-fields.component';
 import { MaterialsComponent } from './components/reference-data/materials/materials.component';
+import { ProductDetailsPopupComponent } from './components/products/product-details-popup/product-details-popup.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MaterialsComponent } from './components/reference-data/materials/materi
     ProductsComponent,
     AddProductComponent,
     ProductFieldsComponent,
-    MaterialsComponent
+    MaterialsComponent,
+    ProductDetailsPopupComponent
   ],
   imports: [
     BrowserModule,

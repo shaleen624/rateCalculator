@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../common/services/product.service';
 import { Product } from 'src/app/common/Inteface';
 import { ReferenceDataService } from 'src/app/common/services/reference-data-service.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ProductDetailsPopupComponent } from './product-details-popup/product-details-popup.component';
 
 @Component({
   selector: 'app-products',
@@ -16,7 +18,8 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private referenceDataService: ReferenceDataService
+    private referenceDataService: ReferenceDataService,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -78,9 +81,24 @@ export class ProductsComponent implements OnInit {
   }
 
   openProductDetails(product: any) {
-    this.selectedProduct = product;
-    this.isPopupOpen = true;
+    const modalRef = this.modalService.open(ProductDetailsPopupComponent, { size: 'lg' });
+    modalRef.componentInstance.product = product;
+    modalRef.componentInstance.productFields = this.productFields;
+
+    modalRef.result.then(
+      (result) => {
+        if (result === 'update') {
+          this.getProducts();
+        }
+      },
+      (reason) => {}
+    );
   }
+
+  // openProductDetails(product: any) {
+  //   this.selectedProduct = product;
+  //   this.isPopupOpen = true;
+  // }
 
   closeProductDetails() {
     this.selectedProduct = null;

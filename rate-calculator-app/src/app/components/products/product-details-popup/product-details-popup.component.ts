@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, FormArray, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -63,15 +63,28 @@ export class ProductDetailsPopupComponent {
     }
   }
 
+  // onAddNestedRowClick(fieldName: string) {
+  //   const nestedRows = this.productForm.get(fieldName) as FormArray;
+  //   const nestedFormGroup = this.formBuilder.group({});
+  //   this.productFields.forEach((field) => {
+  //     if (field.type !== 'nested') {
+  //       nestedFormGroup.addControl(field.name, new FormControl(''));
+  //     }
+  //   });
+  //   nestedRows.push(nestedFormGroup);
+  // }
+
   onAddNestedRowClick(fieldName: string) {
-    const nestedRows = this.productForm.get(fieldName) as FormArray;
-    const nestedFormGroup = this.formBuilder.group({});
-    this.productFields.forEach((field) => {
-      if (field.type !== 'nested') {
-        nestedFormGroup.addControl(field.name, new FormControl(''));
-      }
-    });
-    nestedRows.push(nestedFormGroup);
+    const nestedArray = this.productForm.get(fieldName) as FormArray;
+    nestedArray.push(this.createNestedFormGroup());
+  }
+
+  createNestedFormGroup(): FormGroup {
+    const nestedGroup:any = {};
+    for (const field of this.productFields.find(field => field.type === 'nested').fields) {
+      nestedGroup[field.name] = field.required ? ['', Validators.required] : '';
+    }
+    return this.formBuilder.group(nestedGroup);
   }
 
   onRemoveNestedRowClick(fieldName: string, rowIndex: number) {

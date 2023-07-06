@@ -59,16 +59,16 @@
               <ng-template #collapsedIcon>+</ng-template>
             </span>
             </ng-container>
-            <button class="btn btn-sm btn-primary mb-2" (click)="editField(field)" *ngIf="!field.editing">
+            <button class="btn btn-sm btn-primary mb-1" (click)="editField(field)" *ngIf="!field.editing">
               Edit
             </button>
-            <button class="btn btn-sm btn-success mb-2" (click)="saveField(field)" *ngIf="field.editing">
+            <button class="btn btn-sm btn-success mb-1" (click)="saveField(field)" *ngIf="field.editing">
               Save
             </button>
-            <button class="btn btn-sm btn-secondary mb-2" (click)="cancel(field)" *ngIf="field.editing">
+            <button class="btn btn-sm btn-secondary mb-1" (click)="cancel(field)" *ngIf="field.editing">
               Cancel
             </button>
-            <button class="btn btn-sm btn-danger mb-2" (click)="deleteField(field)">Delete</button>
+            <button class="btn btn-sm btn-danger mb-1" (click)="deleteField(field)">Delete</button>
           </td>
         </tr>
 

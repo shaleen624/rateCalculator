@@ -16,6 +16,8 @@ connectDB();
 
 const app = express();
 
+//app.use(express.static('../frontend/dist/rate-calculator-app'))
+app.use(express.static('rate-calculator-app'))
 // Middleware
 app.use(bodyParser.json());
 app.use(cors({

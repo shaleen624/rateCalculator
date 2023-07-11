@@ -3,25 +3,26 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
-const morgan = require('morgan');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
 const routes = require('./routes');
+dotenv.config(); // Load environment variables from .env file
 const connectDB = require('./config/database');
-
-
-// Load environment variables from .env file
-dotenv.config();
 
 connectDB();
 
 const app = express();
 
 //app.use(express.static('../frontend/dist/rate-calculator-app'))
-app.use(express.static('rate-calculator-app'))
+//app.use(express.static('rate-calculator-app'))
 // Middleware
 app.use(bodyParser.json());
 app.use(cors({
-  origin: 'http://localhost:4200'
+  origin: ['http://localhost:4200',
+    'http://dev.rc.fluffpandastore.com/',
+    'https://dev.rc.fluffpandastore.com/',
+    'http://rc.fluffpandastore.com/',
+    'https://rc.fluffpandastore.com/']
 }));
 app.use(helmet());
 app.use(morgan('combined'));
